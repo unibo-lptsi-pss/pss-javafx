@@ -1,8 +1,7 @@
 package it.unibo.samplejavafx.mvcexample;
 
-import java.util.concurrent.CompletableFuture;
-
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Bounds;
 import javafx.scene.Scene;
@@ -27,7 +26,7 @@ public final class DrawNumberViewImpl implements DrawNumberView {
 
     private DrawNumberViewObserver observer;
     private Stage frame;
-    private Label message;
+    private Label messageLabel;
     private final DrawNumberObservable model;
     private final Bounds initialBounds;
 
@@ -52,59 +51,33 @@ public final class DrawNumberViewImpl implements DrawNumberView {
 
         final VBox vbox = new VBox();
         final HBox playControlsLayout = new HBox();
-        final TextField tNumber = new TextField();
-        final Button bGo = new Button(GO);
-        message = new Label();
-        playControlsLayout.getChildren().addAll(tNumber, bGo, message);
+        final TextField inputNumber = new TextField();
+        final Button goButton = new Button(GO);
+        messageLabel = new Label();
+        playControlsLayout.getChildren().addAll(inputNumber, goButton, messageLabel);
 
         final HBox gameControlsLayout = new HBox();
-        final Button bReset = new Button(RESET);
-        final Button bQuit = new Button(QUIT);
-        gameControlsLayout.getChildren().addAll(bReset, bQuit);
+        final Button resetButton = new Button(RESET);
+        final Button quitButton = new Button(QUIT);
+        gameControlsLayout.getChildren().addAll(resetButton, quitButton);
 
         final Label stateMessage = new Label();
-        stateMessage.textProperty().bind(new SimpleStringProperty("Min=")
-            .concat(model.minProperty())
-            .concat("; Max=")
-            .concat(model.maxProperty())
-            .concat("\nMaxAttempts=")
-            .concat(model.attemptsProperty())
-            .concat("; Remaining attempts=")
-            .concat(model.remainingAttemptsProperty())
-            .concat("\nLast guess:")
-            .concat(model.lastGuessProperty())
-            .concat("; Last outcome:")
-            .concat(model.lastGuessResult())
-        );
+        
+        setUpStateMessage(stateMessage.textProperty(), model);
+        
 
         vbox.getChildren().addAll(playControlsLayout, gameControlsLayout, stateMessage);
 
-        bGo.setOnAction(e -> {
-            try {
-                observer.newAttempt(Integer.parseInt(tNumber.getText()));
-            } catch (NumberFormatException exception) {
+        goButton.setOnAction(e -> {
+            try { observer.newAttempt(Integer.parseInt(inputNumber.getText())); } 
+            catch (NumberFormatException exception) {
                 MessageDialog.showMessageDialog(frame, "Validation error",
-                        "You entered " + tNumber.getText() + ". Provide an integer please...");
+                        "You entered " + inputNumber.getText() + ". Provide an integer please...");
             }
         });
-        bQuit.setOnAction(e -> {
-            final CompletableFuture<Boolean> f = new CompletableFuture<>();
-            f.thenAccept(b -> {
-                if (b) {
-                    observer.quit();
-                }
-            });
-            MessageDialog.showConfirmDialog(frame, "Confirmation needed", "Confirm quitting?", f);
-        });
-        bReset.setOnAction(e -> {
-            final CompletableFuture<Boolean> f = new CompletableFuture<>();
-            f.thenAccept(b -> {
-                if (b) {
-                    observer.resetGame();
-                }
-            });
-            MessageDialog.showConfirmDialog(frame, "Confirmation needed", "Confirm resetting?", f);
-        });
+        quitButton.setOnAction(e -> observer.quit());
+        resetButton.setOnAction(e -> observer.resetGame());
+        
 
         final int sceneWidth = 600;
         final int sceneHeight = 200;
@@ -126,36 +99,48 @@ public final class DrawNumberViewImpl implements DrawNumberView {
     }
 
     @Override
-    public void result(final DrawResult res) {
-        switch (res) {
+    public void result(final DrawResult result) {
+        switch (result) {
             case YOURS_HIGH:
-                plainMessage(res.getDescription());
+                plainMessage(result.getDescription());
                 return;
             case YOURS_LOW:
-                plainMessage(res.getDescription());
+                plainMessage(result.getDescription());
                 return;
             case YOU_WON:
-                plainMessage(res.getDescription() + NEW_GAME);
+                plainMessage(result.getDescription() + NEW_GAME);
                 break;
             case YOU_LOST:
-                // JOptionPane.showMessageDialog(frame, res.getDescription() + NEW_GAME, "Lost",
-                // JOptionPane.WARNING_MESSAGE);
-                plainMessage(res.getDescription() + NEW_GAME);
+                plainMessage(result.getDescription() + NEW_GAME);
                 break;
             default:
-                throw new IllegalStateException("Unexpected result: " + res);
+                throw new IllegalStateException("Unexpected result: " + result);
         }
         observer.resetGame();
     }
 
-    private void plainMessage(final String msg) {
-        // MessageDialog.showMessageDialog(frame, title, msg);
-        message.setText(msg);
+    private void plainMessage(final String message) {
+        this.messageLabel.setText(message);
     }
 
     @Override
-    public void displayError(final String msg) {
-        // MessageDialog.showMessageDialog(frame, "Error", msg);
-        message.setText(msg);
+    public void displayError(final String message) {
+        this.messageLabel.setText(message);
+    }
+
+    private void setUpStateMessage(Property<String> stateMessage, DrawNumberObservable model) {
+        stateMessage.bind(new SimpleStringProperty("Min=")
+            .concat(model.minProperty())
+            .concat("; Max=")
+            .concat(model.maxProperty())
+            .concat("\nMaxAttempts=")
+            .concat(model.attemptsProperty())
+            .concat("; Remaining attempts=")
+            .concat(model.remainingAttemptsProperty())
+            .concat("\nLast guess:")
+            .concat(model.lastGuessProperty())
+            .concat("; Last outcome:")
+            .concat(model.lastGuessResult())
+        );
     }
 }
