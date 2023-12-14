@@ -52,20 +52,22 @@ public final class DrawNumberImpl implements DrawNumberObservable {
         DrawResult result = lastGuessResult.getValue().orElse(DrawResult.YOU_LOST);
         if (this.remainingAttempts.getValue() <= 0) {
             result = DrawResult.YOU_LOST;
+        } else {
+            if (guess < this.min.getValue() || guess > this.max.getValue()) {
+                throw new IllegalArgumentException("The number is outside boundaries");
+            }
+            remainingAttempts.setValue(remainingAttempts.getValue() - 1);
+            if (guess > this.choice.getValue()) {
+                result = DrawResult.YOURS_HIGH;
+            }
+            if (guess < this.choice.getValue()) {
+                result = DrawResult.YOURS_LOW;
+            }
+            if (guess == this.choice.getValue()) {
+                result = DrawResult.YOU_WON;
+            }
         }
-        if (guess < this.min.getValue() || guess > this.max.getValue()) {
-            throw new IllegalArgumentException("The number is outside boundaries");
-        }
-        remainingAttempts.setValue(remainingAttempts.getValue() - 1);
-        if (guess > this.choice.getValue()) {
-            result = DrawResult.YOURS_HIGH;
-        }
-        if (guess < this.choice.getValue()) {
-            result = DrawResult.YOURS_LOW;
-        }
-        if (guess == this.choice.getValue()) {
-            result = DrawResult.YOU_WON;
-        }
+        
         lastGuessResult.setValue(Optional.of(result));
         return result;
     }
