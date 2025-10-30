@@ -7,7 +7,7 @@ plugins {
     application
     // Help in managing JavaFX dependencies
     id("org.openjfx.javafxplugin") version "0.1.0"
-    id("org.javamodularity.moduleplugin") version "1.8.12"
+    id("org.javamodularity.moduleplugin") version "1.8.15"
     /*
      * Adds tasks to export a runnable jar.
      * In order to create it, launch the "shadowJar" task.
