@@ -1,4 +1,4 @@
-package it.unibo.samplejavafx;
+package it.unibo.samplejavafx.bindings;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 public class JavaFXBindingExample extends Application {
 
     @Override
-    public final void start(final Stage primaryStage) throws Exception {
+    public final void start(final Stage primaryStage) {
         final TextField input1 = new TextField();
         final TextField input2 = new TextField();
         final Label label = new Label();
@@ -35,22 +35,5 @@ public class JavaFXBindingExample extends Application {
      */
     public static void run(final String... args) {
         launch();
-    }
-
-    /**
-     * Entry point's class.
-     */
-    public static final class Main {
-        private Main() {
-            // the constructor will never be called directly.
-        }
-
-        /**
-         * Program's entry point.
-         * @param args
-         */
-        public static void main(final String... args) {
-            JavaFXBindingExample.run(args);
-        }
     }
 }
