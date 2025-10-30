@@ -5,44 +5,28 @@ plugins {
     // Apply the application plugin to add support for building a CLI application
     // You can run your app via task "run": ./gradlew run
     application
-
+    // Help in managing JavaFX dependencies
+    id("org.openjfx.javafxplugin") version "0.1.0"
+    id("org.javamodularity.moduleplugin") version "1.8.12"
     /*
      * Adds tasks to export a runnable jar.
      * In order to create it, launch the "shadowJar" task.
      * The runnable jar will be found in build/libs/projectname-all.jar
      */
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.gradleup.shadow") version "9.2.2"
 }
 
 repositories {
     mavenCentral()
 }
 
-val javaFXModules = listOf(
-    "base",
-    "controls",
-    "fxml",
-    "swing",
-    "graphics"
-)
-
-val supportedPlatforms = listOf("linux", "mac", "win") // All required for OOP
-
+javafx {
+    modules("javafx.base", "javafx.controls", "javafx.graphics")
+    version  = "25"
+}
 dependencies {
     // Suppressions for SpotBugs
     compileOnly("com.github.spotbugs:spotbugs-annotations:4.9.8")
-
-    // Example library: Guava. Add what you need (and remove Guava if you don't use it)
-    // implementation("com.google.guava:guava:28.1-jre")
-
-    // JavaFX: comment out if you do not need them
-    val javaFxVersion = 15
-    for (platform in supportedPlatforms) {
-        for (module in javaFXModules) {
-            implementation("org.openjfx:javafx-$module:$javaFxVersion:$platform")
-        }
-    }
-
     val jUnitVersion = "6.0.0"
     // JUnit API and testing engine
     testImplementation("org.junit.jupiter:junit-jupiter-api:$jUnitVersion")

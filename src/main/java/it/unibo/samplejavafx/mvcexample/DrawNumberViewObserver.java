@@ -1,7 +1,8 @@
 package it.unibo.samplejavafx.mvcexample;
 
 /**
- * Controller interface.
+ * Controller interface, namely the entity which receives events from the view
+ * and acts on the model.
  */
 public interface DrawNumberViewObserver {
 

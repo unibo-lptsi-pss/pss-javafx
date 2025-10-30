@@ -1,7 +1,9 @@
 package it.unibo.samplejavafx.mvcexample;
 
 /**
- *
+ * View of a simple "draw a number" game.
+ * It shows the current status of the game to the user, and gets the user's input.
+ * It is notified by a controller through an observer interface.
  */
 public interface DrawNumberView {
 
@@ -31,5 +33,4 @@ public interface DrawNumberView {
      * @param message the message associated with the error.
      */
     void displayError(String message);
-
 }

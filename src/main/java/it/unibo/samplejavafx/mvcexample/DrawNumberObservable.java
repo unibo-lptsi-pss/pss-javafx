@@ -6,7 +6,6 @@ import javafx.beans.property.Property;
 
 /**
  * This class models a draw number game.
- *
  */
 public interface DrawNumberObservable extends DrawNumber {
     /**

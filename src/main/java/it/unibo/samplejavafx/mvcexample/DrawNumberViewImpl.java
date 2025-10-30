@@ -1,6 +1,8 @@
 package it.unibo.samplejavafx.mvcexample;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import it.unibo.samplejavafx.mvcexample.handler.GoButtonActionHandler;
+import it.unibo.samplejavafx.mvcexample.handler.QuitButtonActionHandler;
+import it.unibo.samplejavafx.mvcexample.handler.ResetButtonActionHandler;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Bounds;
@@ -15,15 +17,12 @@ import javafx.stage.Stage;
 /**
  * Graphical {@link DrawNumberView} implementation.
  */
-@SuppressFBWarnings()
 public final class DrawNumberViewImpl implements DrawNumberView {
-
     private static final String FRAME_NAME = "Draw Number App";
     private static final String QUIT = "Quit";
     private static final String RESET = "Reset";
     private static final String GO = "Go";
     private static final String NEW_GAME = ": a new game starts!";
-
     private DrawNumberViewObserver observer;
     private Stage frame;
     private Label messageLabel;
@@ -48,43 +47,26 @@ public final class DrawNumberViewImpl implements DrawNumberView {
             frame.setX(initialBounds.getMinX());
             frame.setY(initialBounds.getMinY());
         }
-
         final VBox vbox = new VBox();
         final HBox playControlsLayout = new HBox();
         final TextField inputNumber = new TextField();
         final Button goButton = new Button(GO);
         messageLabel = new Label();
         playControlsLayout.getChildren().addAll(inputNumber, goButton, messageLabel);
-
         final HBox gameControlsLayout = new HBox();
         final Button resetButton = new Button(RESET);
         final Button quitButton = new Button(QUIT);
         gameControlsLayout.getChildren().addAll(resetButton, quitButton);
-
         final Label stateMessage = new Label();
-        
         setUpStateMessage(stateMessage.textProperty(), model);
-        
-
         vbox.getChildren().addAll(playControlsLayout, gameControlsLayout, stateMessage);
-
-        goButton.setOnAction(e -> {
-            try { observer.newAttempt(Integer.parseInt(inputNumber.getText())); } 
-            catch (NumberFormatException exception) {
-                MessageDialog.showMessageDialog(frame, "Validation error",
-                        "You entered " + inputNumber.getText() + ". Provide an integer please...");
-            }
-        });
-        quitButton.setOnAction(e -> observer.quit());
-        resetButton.setOnAction(e -> observer.resetGame());
-        
-
+        goButton.setOnAction(new GoButtonActionHandler(observer, inputNumber, frame));
+        quitButton.setOnAction(new QuitButtonActionHandler(observer));
+        resetButton.setOnAction(new ResetButtonActionHandler(observer));
         final int sceneWidth = 600;
         final int sceneHeight = 200;
         final Scene scene = new Scene(vbox, sceneWidth, sceneHeight);
-
         this.frame.setScene(scene);
-
         this.frame.show();
     }
 
@@ -101,10 +83,7 @@ public final class DrawNumberViewImpl implements DrawNumberView {
     @Override
     public void result(final DrawResult result) {
         switch (result) {
-            case YOURS_HIGH:
-                plainMessage(result.getDescription());
-                return;
-            case YOURS_LOW:
+            case YOURS_HIGH, YOURS_LOW:
                 plainMessage(result.getDescription());
                 return;
             case YOU_WON:

@@ -3,16 +3,10 @@ package it.unibo.samplejavafx.mvcexample;
 import java.util.Optional;
 import java.util.Random;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 
-/**
- *
- */
-@SuppressFBWarnings()
 public final class DrawNumberImpl implements DrawNumberObservable {
-
     private final Property<Integer> choice;
     private final Property<Integer> min;
     private final Property<Integer> max;
@@ -21,7 +15,6 @@ public final class DrawNumberImpl implements DrawNumberObservable {
     private final Property<Optional<Integer>> lastGuess;
     private final Property<Optional<DrawResult>> lastGuessResult;
     private final Random random = new Random();
-
     /**
      * @param configuration the game configuration
      * @throws IllegalStateException if the configuration is not consistent
@@ -29,9 +22,6 @@ public final class DrawNumberImpl implements DrawNumberObservable {
     public DrawNumberImpl(final Configuration configuration) {
         lastGuess = new SimpleObjectProperty<>(Optional.empty());
         lastGuessResult = new SimpleObjectProperty<>(Optional.empty());
-        if (!configuration.isConsistent()) {
-            throw new IllegalArgumentException("The game requires a valid configuration");
-        }
         this.min = new SimpleObjectProperty<>(configuration.getMin());
         this.max = new SimpleObjectProperty<>(configuration.getMax());
         this.attempts = new SimpleObjectProperty<>(configuration.getAttempts());
