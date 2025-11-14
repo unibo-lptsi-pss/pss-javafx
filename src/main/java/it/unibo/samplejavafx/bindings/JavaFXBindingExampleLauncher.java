@@ -1,5 +1,7 @@
-import it.unibo.samplejavafx.bindings.JavaFXBindingExample;
+package it.unibo.samplejavafx.bindings;
 
-void main(String[] args) {
-    JavaFXBindingExample.run(args);
+public class JavaFXBindingExampleLauncher {
+    static void main(String[] args) {
+        JavaFXBindingExample.run(args);
+    }
 }

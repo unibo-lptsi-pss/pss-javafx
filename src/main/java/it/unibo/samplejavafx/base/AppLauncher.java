@@ -1,5 +1,7 @@
-import it.unibo.samplejavafx.base.App;
+package it.unibo.samplejavafx.base;
 
-void main(String[] args) {
-    App.run(args);
+class AppLauncher {
+    static void main(String[] args) {
+        App.run(args);
+    }
 }

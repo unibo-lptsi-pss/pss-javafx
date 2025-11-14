@@ -1,5 +1,8 @@
+package it.unibo.samplejavafx.stages;
 import it.unibo.samplejavafx.stages.JavaFXAppMoreStages;
 
-void main(String[] args) {
-    JavaFXAppMoreStages.run(args);
+public class JavaFXAppMoreStagesLauncher {
+    static void main(String[] args) {
+        JavaFXAppMoreStages.run(args);
+    }
 }

@@ -5,8 +5,6 @@ plugins {
     // Apply the application plugin to add support for building a CLI application
     // You can run your app via task "run": ./gradlew run
     application
-    // Help in managing JavaFX dependencies
-    id("org.openjfx.javafxplugin") version "0.1.0"
     id("org.javamodularity.moduleplugin") version "2.0.0"
     /*
      * Adds tasks to export a runnable jar.
@@ -20,10 +18,23 @@ repositories {
     mavenCentral()
 }
 
-javafx {
-    modules("javafx.base", "javafx.controls", "javafx.graphics")
-    version  = "25"
+val javaFXModules = listOf(
+    "base",
+    "controls",
+    "fxml",
+    "swing",
+    "graphics"
+)
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(25))
+    }
 }
+
+val javaFxVersion = 25
+val supportedPlatforms = listOf("linux", "mac", "win")
+
 dependencies {
     // Suppressions for SpotBugs
     compileOnly("com.github.spotbugs:spotbugs-annotations:4.9.8")
@@ -31,6 +42,11 @@ dependencies {
     // JUnit API and testing engine
     testImplementation("org.junit.jupiter:junit-jupiter-api:$jUnitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$jUnitVersion")
+    for (platform in supportedPlatforms) {
+        for (module in javaFXModules) {
+            implementation("org.openjfx:javafx-$module:$javaFxVersion:$platform")
+        }
+    }
 }
 
 tasks.withType<Test> {
@@ -40,5 +56,5 @@ tasks.withType<Test> {
 
 application {
     // Define the main class for the application
-    mainClass.set("it.unibo.samplejavafx.App")
+    mainClass.set("it.unibo.samplejavafx.base.AppLauncher")
 }

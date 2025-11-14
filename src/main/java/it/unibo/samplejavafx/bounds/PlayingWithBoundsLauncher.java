@@ -1,5 +1,8 @@
+package it.unibo.samplejavafx.bounds;
 import it.unibo.samplejavafx.bounds.PlayingWithBounds;
 
-void main(String[] args) {
-    PlayingWithBounds.run(args);
+public class PlayingWithBoundsLauncher {
+    static void main(String[] args) {
+        PlayingWithBounds.run(args);
+    }
 }
