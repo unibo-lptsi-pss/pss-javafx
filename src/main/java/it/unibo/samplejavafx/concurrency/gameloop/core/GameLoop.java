@@ -39,7 +39,7 @@ public abstract class GameLoop<I, O> implements Runnable {
         if (frameTime < expectedFrameTimeMillis) {
             try {
                 Thread.sleep(expectedFrameTimeMillis - frameTime);
-            } catch (InterruptedException e) { }
+            } catch (InterruptedException _) { }
         }
     }
 
