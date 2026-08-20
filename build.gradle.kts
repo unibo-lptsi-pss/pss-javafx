@@ -37,7 +37,7 @@ val supportedPlatforms = listOf("linux", "mac", "win")
 
 dependencies {
     // Suppressions for SpotBugs
-    compileOnly("com.github.spotbugs:spotbugs-annotations:4.10.3")
+    compileOnly("com.github.spotbugs:spotbugs-annotations:4.10.4")
     val jUnitVersion = "6.1.3"
     // JUnit API and testing engine
     testImplementation("org.junit.jupiter:junit-jupiter-api:$jUnitVersion")
