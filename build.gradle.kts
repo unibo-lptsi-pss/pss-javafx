@@ -5,7 +5,7 @@ plugins {
     // Apply the application plugin to add support for building a CLI application
     // You can run your app via task "run": ./gradlew run
     application
-    id("org.javamodularity.moduleplugin") version "2.0.1"
+    id("org.javamodularity.moduleplugin") version "2.1.0"
     /*
      * Adds tasks to export a runnable jar.
      * In order to create it, launch the "shadowJar" task.
