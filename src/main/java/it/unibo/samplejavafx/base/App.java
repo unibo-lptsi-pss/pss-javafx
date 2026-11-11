@@ -5,6 +5,7 @@ package it.unibo.samplejavafx.base;
 
 
 import javafx.application.Application;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
@@ -12,11 +13,11 @@ import javafx.stage.Stage;
 
 public class App extends Application {
     @Override
-    public void start(Stage stage) {
-        final Label message = new Label("Hello, JavaFX!");
-        StackPane root = new StackPane(message);
-        stage.setTitle("Hello World!");
-        stage.setScene(new Scene(root, 300, 200));
+    public void start(Stage stage) throws Exception {
+        Group root = new Group();
+        Scene scene = new Scene(root, 500, 300);
+        stage.setTitle("JavaFX Demo");
+        stage.setScene(scene);
         stage.show();
     }
 
