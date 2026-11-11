@@ -5,7 +5,7 @@ plugins {
     // Apply the application plugin to add support for building a CLI application
     // You can run your app via task "run": ./gradlew run
     application
-    id("org.javamodularity.moduleplugin") version "2.1.0"
+
     /*
      * Adds tasks to export a runnable jar.
      * In order to create it, launch the "shadowJar" task.
@@ -18,35 +18,39 @@ repositories {
     mavenCentral()
 }
 
-val javaFXModules = listOf(
-    "base",
-    "controls",
-    "fxml",
-    "swing",
-    "graphics"
-)
-
 java {
     toolchain {
+        // Java version used to compile and run the project
         languageVersion.set(JavaLanguageVersion.of(25))
     }
 }
 
-val javaFxVersion = 25
-val supportedPlatforms = listOf("linux", "mac", "win")
+val javaFXModules = listOf("base", "controls", "fxml", "swing", "graphics")
+
+val supportedPlatforms = listOf("linux", "mac", "win") // All required for OOP
 
 dependencies {
     // Suppressions for SpotBugs
     compileOnly("com.github.spotbugs:spotbugs-annotations:4.10.5")
-    val jUnitVersion = "6.1.3"
-    // JUnit API and testing engine
-    testImplementation("org.junit.jupiter:junit-jupiter-api:$jUnitVersion")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$jUnitVersion")
+
+    // Example library: Guava. Add what you need (and use the latest version where appropriate).
+    // implementation("com.google.guava:guava:28.1-jre")
+
+    // JavaFX: comment out if you do not need them
+    val javaFxVersion = "27.0.1"
+    implementation("org.openjfx:javafx:$javaFxVersion")
     for (platform in supportedPlatforms) {
         for (module in javaFXModules) {
             implementation("org.openjfx:javafx-$module:$javaFxVersion:$platform")
         }
     }
+
+    // The BOM (Bill of Materials) synchronizes all the versions of Junit coherently.
+    testImplementation(platform("org.junit:junit-bom:6.1.3"))
+    // The annotations, assertions and other elements we want to have access when compiling our tests.
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    // The engine that must be available at runtime to run the tests.
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 tasks.withType<Test> {
@@ -55,6 +59,6 @@ tasks.withType<Test> {
 }
 
 application {
-    // Define the main class for the application
-    mainClass.set("it.unibo.samplejavafx.base.AppLauncher")
+    // Define the main class for the application (property "main" in gradle.properties, override with -Pmain=...)
+    mainClass.set(providers.gradleProperty("main"))
 }
