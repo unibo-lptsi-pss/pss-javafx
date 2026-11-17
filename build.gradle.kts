@@ -30,6 +30,8 @@ val javaFXModules = listOf("base", "controls", "fxml", "swing", "graphics")
 val supportedPlatforms = listOf("linux", "mac", "win") // All required for OOP
 
 dependencies {
+    implementation("org.apache.commons:commons-csv:1.14.1")
+
     // Suppressions for SpotBugs
     compileOnly("com.github.spotbugs:spotbugs-annotations:4.10.5")
 

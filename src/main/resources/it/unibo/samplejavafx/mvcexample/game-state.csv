@@ -1,0 +1,2 @@
+min,max,attempts,remainingAttempts,numberToGuess,lastGuess,lastResult
+10,100,5,3,42,60,YOURS_HIGH

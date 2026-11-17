@@ -30,6 +30,18 @@ public final class DrawNumberImpl implements DrawNumberObservable {
         this.reset();
     }
 
+    /**
+     * Restores a saved game without drawing a new number or resetting its attempts.
+     * @param state the saved state
+     */
+    public DrawNumberImpl(final GameState state) {
+        this(new Configuration(state.max(), state.min(), state.attempts()));
+        choice.setValue(state.numberToGuess());
+        remainingAttempts.setValue(state.remainingAttempts());
+        lastGuess.setValue(state.lastGuess());
+        lastGuessResult.setValue(state.lastResult());
+    }
+
     @Override
     public void reset() {
         this.remainingAttempts.setValue(this.attempts.getValue());
