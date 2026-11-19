@@ -75,15 +75,18 @@ public class ManyBallsApp extends Application {
         gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, WIDTH, HEIGHT);
         gc.setFill(Color.RED);
-        for (Ball ball : balls) {
-            gc.fillOval(
-                ball.getPosition().x() - ball.getRadius(),
-                ball.getPosition().y() - ball.getRadius(),
-                ball.getRadius() * 2, ball.getRadius() * 2
-            );
-        }
+        balls.forEach(ball -> {
+            double x = ball.getPosition().x() - ball.getRadius();
+            double y = ball.getPosition().y() - ball.getRadius();
+            double diameter = ball.getRadius() * 2;
+            gc.fillOval(x, y, diameter, diameter);
+            gc.strokeOval(x, y, diameter, diameter);
+        });
         gc.setFill(Color.BLACK);
         gc.fillText("Press SPACE to add a ball", TEXT_X, TEXT_Y);
+        // next line, number of balls
+        gc.fillText(" Number of balls: " + balls.size(), TEXT_X, TEXT_Y + 20);
+        
     }
 
     static class Main {
