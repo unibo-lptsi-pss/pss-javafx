@@ -80,11 +80,11 @@ public class ManyBallsGame extends GameLoop<String, List<Ball>> {
         double r = ball.getRadius();
         if (x < r || x > width - r) {
             dx = -dx;
-            x = Math.max(r, Math.min(x, width - r));
+            x = Math.clamp(x, r, width - r);
         }
         if (y < r || y > height - r) {
             dy = -dy;
-            y = Math.max(r, Math.min(y, height - r));
+            y = Math.clamp(y, r, height - r);
         }
         return new Ball(new Vector2D(x, y), r, new Vector2D(dx, dy));
     }

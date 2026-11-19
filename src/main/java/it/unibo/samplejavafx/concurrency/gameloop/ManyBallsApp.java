@@ -21,8 +21,12 @@ public class ManyBallsApp extends Application {
     private RenderLoop<List<Ball>> renderLoop;
 
     @Override
-    public void start(Stage primaryStage) {
+    public void init() {
         setupGame();
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         Scene scene = setupScene(canvas);
@@ -54,7 +58,9 @@ public class ManyBallsApp extends Application {
     }
 
     private void startRenderLoop(GraphicsContext gc) {
-        renderLoop = new RenderLoop<>(game.getOutputBuffer(), balls -> render(gc, balls));
+        renderLoop = new RenderLoop<>(
+            game.getOutputBuffer(), balls -> render(gc, balls)
+        );
         new Thread(renderLoop).start();
     }
 
@@ -70,7 +76,11 @@ public class ManyBallsApp extends Application {
         gc.fillRect(0, 0, WIDTH, HEIGHT);
         gc.setFill(Color.RED);
         for (Ball ball : balls) {
-            gc.fillOval(ball.getPosition().x() - ball.getRadius(), ball.getPosition().y() - ball.getRadius(), ball.getRadius() * 2, ball.getRadius() * 2);
+            gc.fillOval(
+                ball.getPosition().x() - ball.getRadius(),
+                ball.getPosition().y() - ball.getRadius(),
+                ball.getRadius() * 2, ball.getRadius() * 2
+            );
         }
         gc.setFill(Color.BLACK);
         gc.fillText("Press SPACE to add a ball", TEXT_X, TEXT_Y);

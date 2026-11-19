@@ -1,2 +1,3 @@
 min,max,attempts,remainingAttempts,numberToGuess,lastGuess,lastResult
-10,100,5,3,42,60,YOURS_HIGH
+10,100,5,5,42,60,YOURS_HIGH
+

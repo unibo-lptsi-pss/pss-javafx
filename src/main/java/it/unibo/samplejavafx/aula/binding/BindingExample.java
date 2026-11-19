@@ -13,7 +13,7 @@ public class BindingExample extends Application {
         final TextField input = new TextField();
         final Label mirror = new Label();
         // connette la label con il valore del textfield
-        mirror.textProperty().bindBidirectional(input.textProperty());
+        mirror.textProperty().bind(input.textProperty());
         mirror.setText("default");
 
         stage.setTitle("JavaFX - Binding");

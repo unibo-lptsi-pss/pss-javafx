@@ -8,7 +8,7 @@ public class App extends javafx.application.Application {
     @Override
     public void start(Stage stage) throws Exception {
         Group root = new Group();
-        Scene scene = new Scene(root, 500, 300);
+        Scene scene = new Scene(root, 300, 300);
         stage.setTitle("JavaFX Demo");
         stage.setScene(scene);
         stage.show();

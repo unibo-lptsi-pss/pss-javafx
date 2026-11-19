@@ -63,7 +63,7 @@ public class LayoutsExample extends Application {
 
     private static Parent anchorPaneExample() {
         Button topLeft = new Button("Top Left");
-        AnchorPane.setTopAnchor(topLeft, 10.0); // 10px from the top edge
+        AnchorPane.setTopAnchor(topLeft, 100.0); // 10px from the top edge
         AnchorPane.setLeftAnchor(topLeft, 10.0); // 10px from the left edge
         return new AnchorPane(topLeft);
     }
