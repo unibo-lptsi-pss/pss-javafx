@@ -19,8 +19,10 @@ public class JumpingBallApp extends Application {
     private static final double HEIGHT = 600;
     private static final double TEXT_X = 10;
     private static final double TEXT_Y = 20;
+    private static final double CANVAS_ORIGIN = 0;
+    private static final double DIAMETER_MULTIPLIER = 2;
 
-    private final Set<Command> pressedKeys = new HashSet<>();
+    private final Set<JumpingBallCommand> pressedCommands = new HashSet<>();
     private JumpingBallGame game;
     private RenderLoop<Ball> renderLoop;
 
@@ -28,13 +30,13 @@ public class JumpingBallApp extends Application {
     public void start(Stage primaryStage) {
         setupGame();
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
-        GraphicsContext gc = canvas.getGraphicsContext2D();
+        GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
         Scene scene = setupScene(canvas);
         setupInputHandlers(scene);
         primaryStage.setTitle("Jumping Ball Game");
         primaryStage.setScene(scene);
         primaryStage.show();
-        startRenderLoop(gc);
+        startRenderLoop(graphicsContext);
     }
 
     private void setupGame() {
@@ -49,18 +51,21 @@ public class JumpingBallApp extends Application {
     }
 
     private void setupInputHandlers(Scene scene) {
-        scene.setOnKeyPressed(e -> {
-            mapInput(e.getCode()).ifPresent(pressedKeys::add);
-            game.sendInput(new HashSet<>(pressedKeys));
+        scene.setOnKeyPressed(event -> {
+            mapKeyCode(event.getCode()).ifPresent(pressedCommands::add);
+            game.sendInput(new HashSet<>(pressedCommands));
         });
-        scene.setOnKeyReleased(e -> {
-            mapInput(e.getCode()).ifPresent(pressedKeys::remove);
-            game.sendInput(new HashSet<>(pressedKeys));
+        scene.setOnKeyReleased(event -> {
+            mapKeyCode(event.getCode()).ifPresent(pressedCommands::remove);
+            game.sendInput(new HashSet<>(pressedCommands));
         });
     }
 
-    private void startRenderLoop(GraphicsContext gc) {
-        renderLoop = new RenderLoop<>(game.getOutputBuffer(), ball -> render(gc, ball));
+    private void startRenderLoop(GraphicsContext graphicsContext) {
+        renderLoop = new RenderLoop<>(
+            game.getOutputBuffer(),
+            ball -> render(graphicsContext, ball)
+        );
         new Thread(renderLoop).start();
     }
 
@@ -71,22 +76,31 @@ public class JumpingBallApp extends Application {
         renderLoop.stopLoop();
     }
 
-    private Optional<Command> mapInput(KeyCode code) {
-        return switch (code) {
-            case LEFT -> java.util.Optional.of(Command.LEFT);
-            case RIGHT -> java.util.Optional.of(Command.RIGHT);
-            case SPACE -> java.util.Optional.of(Command.JUMP);
-            default -> java.util.Optional.empty();
+    private Optional<JumpingBallCommand> mapKeyCode(KeyCode keyCode) {
+        return switch (keyCode) {
+            case LEFT -> Optional.of(JumpingBallCommand.LEFT);
+            case RIGHT -> Optional.of(JumpingBallCommand.RIGHT);
+            case SPACE -> Optional.of(JumpingBallCommand.JUMP);
+            default -> Optional.empty();
         };
     }
 
-    private void render(GraphicsContext gc, Ball ball) {
-        gc.setFill(Color.WHITE);
-        gc.fillRect(0, 0, WIDTH, HEIGHT);
-        gc.setFill(Color.BLUE);
-        gc.fillOval(ball.getPosition().x() - ball.getRadius(), ball.getPosition().y() - ball.getRadius(), ball.getRadius() * 2, ball.getRadius() * 2);
-        gc.setFill(Color.BLACK);
-        gc.fillText("Press SPACE to jump, LEFT/RIGHT to move", TEXT_X, TEXT_Y);
+    private void render(GraphicsContext graphicsContext, Ball ball) {
+        graphicsContext.setFill(Color.WHITE);
+        graphicsContext.fillRect(CANVAS_ORIGIN, CANVAS_ORIGIN, WIDTH, HEIGHT);
+        graphicsContext.setFill(Color.BLUE);
+        graphicsContext.fillOval(
+            ball.getPosition().x() - ball.getRadius(),
+            ball.getPosition().y() - ball.getRadius(),
+            ball.getRadius() * DIAMETER_MULTIPLIER,
+            ball.getRadius() * DIAMETER_MULTIPLIER
+        );
+        graphicsContext.setFill(Color.BLACK);
+        graphicsContext.fillText(
+            "Press SPACE to jump, LEFT/RIGHT to move",
+            TEXT_X,
+            TEXT_Y
+        );
     }
 
     static class Main {

@@ -52,7 +52,7 @@ public class ManyBallsApp extends Application {
     private void setupInputHandlers(Scene scene) {
         scene.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.SPACE) {
-                game.sendInput("ADD");
+                game.sendInput(ManyBallsCommand.ADD_BALL);
             }
         });
     }
